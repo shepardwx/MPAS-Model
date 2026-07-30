@@ -271,6 +271,7 @@
     snownc_p,         &!
     snowncv_p,        &!
     graupelnc_p,      &!
+    cloudnc_p,      &!
     graupelncv_p,     &!
     sr_p
 

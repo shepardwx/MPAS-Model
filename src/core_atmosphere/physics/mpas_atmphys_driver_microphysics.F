@@ -135,6 +135,7 @@
 
        !surface precipitation:
        if(.not.allocated(sr_p)        ) allocate(sr_p(ims:ime,jms:jme)        )
+       if(.not.allocated(cloudnc_p)    ) allocate(cloudnc_p(ims:ime,jms:jme)    )
        if(.not.allocated(snownc_p)    ) allocate(snownc_p(ims:ime,jms:jme)    )
        if(.not.allocated(snowncv_p)   ) allocate(snowncv_p(ims:ime,jms:jme)   )
        if(.not.allocated(graupelnc_p) ) allocate(graupelnc_p(ims:ime,jms:jme) )
@@ -220,6 +221,7 @@
        if(allocated(snowncv_p)   ) deallocate(snowncv_p   )
        if(allocated(graupelnc_p) ) deallocate(graupelnc_p )
        if(allocated(graupelncv_p)) deallocate(graupelncv_p)
+       if(allocated(cloudnc_p)) deallocate(cloudnc_p)
 
        !cloud water,cloud ice,and snow effective radii:
        if(allocated(recloud_p)) deallocate(recloud_p)
@@ -395,6 +397,7 @@
                   pii       = pi_p        , p          = pres_p       , dz         = dz_p         , &
                   w         = w_p         , dt_in      = dt_microp    , itimestep  = itimestep    , &
                   rainnc    = rainnc_p    , rainncv    = rainncv_p    , snownc     = snownc_p     , &
+                  cloudnc   = cloudnc_p, & !RC
                   snowncv   = snowncv_p   , graupelnc  = graupelnc_p  , graupelncv = graupelncv_p , &
                   sr        = sr_p        , rainprod   = rainprod_p   , evapprod   = evapprod_p   , &
                   re_cloud  = recloud_p   , re_ice     = reice_p      , re_snow    = resnow_p     , &
@@ -420,6 +423,7 @@
                   w         = w_p         , dt_in      = dt_microp    , itimestep  = itimestep    , &
                   rainnc    = rainnc_p    , rainncv    = rainncv_p    , snownc     = snownc_p     , &
                   snowncv   = snowncv_p   , graupelnc  = graupelnc_p  , graupelncv = graupelncv_p , &
+                  cloudnc   = cloudnc_p, & !RC
                   sr        = sr_p        , rainprod   = rainprod_p   , evapprod   = evapprod_p   , &
                   re_cloud  = recloud_p   , re_ice     = reice_p      , re_snow    = resnow_p     , &
                   has_reqc  = has_reqc    , has_reqi   = has_reqi     , has_reqs   = has_reqs     , &
@@ -549,6 +553,7 @@
           snownc_p(i,j)     = 0._RKIND
           graupelnc_p(i,j)  = 0._RKIND
           sr_p(i,j)         = 0._RKIND
+          cloudnc_p(i,j)    = 0._RKIND
        enddo
        enddo
 
@@ -580,7 +585,7 @@
 
  real(kind=RKIND),pointer:: config_bucket_rainnc
  real(kind=RKIND),dimension(:),pointer:: precipw
- real(kind=RKIND),dimension(:),pointer:: graupelnc,rainnc,snownc
+ real(kind=RKIND),dimension(:),pointer:: graupelnc,rainnc,snownc,cloudnc
  real(kind=RKIND),dimension(:),pointer:: graupelncv,rainncv,snowncv,sr
 
 !local variables and arrays:
@@ -599,6 +604,7 @@
  call mpas_pool_get_array(diag_physics,'rainnc'    ,rainnc    )
  call mpas_pool_get_array(diag_physics,'rainncv'   ,rainncv   )
  call mpas_pool_get_array(diag_physics,'snownc'    ,snownc    )
+ call mpas_pool_get_array(diag_physics,'cloudnc'    ,cloudnc    )
  call mpas_pool_get_array(diag_physics,'snowncv'   ,snowncv   )
  call mpas_pool_get_array(diag_physics,'sr'        ,sr        )
 
@@ -643,6 +649,7 @@
 
           !accumulated precipitation:
           snownc(i)    = snownc(i) + snowncv(i)
+          cloudnc(i)   = cloudnc(i)
           graupelnc(i) = graupelnc(i) + graupelncv(i)
        enddo
        enddo
