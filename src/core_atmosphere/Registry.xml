@@ -1500,6 +1500,9 @@
                         <var name="qv" array_group="moist" units="kg kg^{-1}"
                              description="Water vapor mixing ratio"/>
 
+        		<var name="mytracer1" array_group="passive" units="kg kg^{-1}"
+             		     description="Our first passive tracer"/>
+
                         <var name="qc" array_group="moist" units="kg kg^{-1}"
                              description="Cloud water mixing ratio"
                              packages="bl_mynn_in;bl_ysu_in;cu_tiedtke_in;mp_kessler_in;mp_thompson_in;mp_wsm6_in"/>
@@ -1779,6 +1782,11 @@
 
                 
                 <!-- tendencies for prognostic variables -->
+                <var name="mytracer1_sources" type="real"
+                     dimensions="nVertLevels nCells Time"
+                     units="kg m^{-2} s^{-1}"
+                     description="Our first passive tracer areal production rate" />
+
                 <var name="tend_u" name_in_code="u" type="real" dimensions="nVertLevels nEdges Time" units="m s^{-2}"
                      description="Tendency of u from dynamics"/>
 
@@ -1793,6 +1801,33 @@
 
                 <var name="rt_diabatic_tend" type="real" dimensions="nVertLevels nCells Time" units="K s^{-1}"
                      description="Tendency of modified potential temperature due to cloud microphysics"/>
+
+                <var name="tend_prs_sde" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of snow mixing ratio due to deposition/sublimation (Thompson)"/>
+
+                <var name="tend_prs_scw" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of snow mixing ratio due to riming/accretion of cloud water"/>
+
+                <var name="tend_prs_iau" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of snow mixing ratio due to autoconversion from cloud ice"/>
+
+                <var name="tend_pri_ide" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of cloud ice mixing ratio due to deposition/sublimation"/>
+
+                <var name="tend_prs_sci" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of snow mixing ratio due to accretion of cloud ice"/>
+
+                <var name="tend_prr_sml" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of rain mixing ratio due to melting of snow"/>
+
+                <var name="tend_prg_gcw" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of graupel mixing ratio due to riming/accretion of cloud water"/>
+
+                <var name="tend_prg_rcs" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of graupel mixing ratio due to collection of snow"/>
+
+                <var name="tend_prr_gml" type="real" dimensions="nVertLevels nCells Time" units="kg kg^{-1} s^{-1}"
+                     description="Tendency of rain mixing ratio due to melting of graupel"/>
 
                 <var name="euler_tend_u" name_in_code="u_euler" type="real" dimensions="nVertLevels nEdges Time" units="m s^{-2}"
                      description="Tendency of u from dynamics"/>
@@ -1821,6 +1856,9 @@
                 <var_array name="scalars_tend" type="real" dimensions="nVertLevels nCells Time">
                         <var name="tend_qv" name_in_code="qv" array_group="moist" units="kg m^{-3} s^{-1}"
                              description="Tendency of water vapor mass per unit volume divided by d(zeta)/dz"/>
+
+        		<var name="tend_mytracer1" name_in_code="mytracer1" array_group="passive" units="kg m^{-3} s^{-1}"
+             		     description="Tendency of our first tracer mass per unit volume divided by d(zeta)/dz"/>
 
                         <var name="tend_qc" name_in_code="qc" array_group="moist" units="kg m^{-3} s^{-1}"
                              description="Tendency of cloud water mass per unit volume divided by d(zeta)/dz"
@@ -3069,6 +3107,10 @@
 
                 <var name="rthratenlw" type="real" dimensions="nVertLevels nCells Time" units="K s^{-1}"
                      description="tendency of potential temperature due to long wave radiation"/>
+
+                <!-- ================================================================================================== -->
+                <!-- PROCESS RATES FROM THOMPSON MICROPHYSICS:                                                           -->
+                <!-- ================================================================================================== -->
 #endif
         </var_struct>
 

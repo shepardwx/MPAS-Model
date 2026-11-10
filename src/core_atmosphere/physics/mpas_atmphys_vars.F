@@ -275,6 +275,15 @@
  real(kind=RKIND),dimension(:,:,:),allocatable:: &
     rainprod_p,       &!
     evapprod_p,       &!
+    prs_sde_p,        &!
+    prs_scw_p,        &!
+    prs_iau_p,        &!
+    pri_ide_p,        &!
+    prs_sci_p,        &!
+    prr_sml_p,        &!
+    prg_gcw_p,        &!
+    prg_rcs_p,        &!
+    prr_gml_p,        &!
     recloud_p,        &!
     reice_p,          &!
     resnow_p,         &!

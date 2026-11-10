@@ -597,7 +597,16 @@
              ni_p(i,k,j) = ni(k,i)
              nr_p(i,k,j) = nr(k,i)
              rainprod_p(i,k,j) = rainprod(k,i)
-             evapprod_p(i,k,j) = evapprod(k,i)
+            evapprod_p(i,k,j) = evapprod(k,i)
+            prs_sde_p(i,k,j) = 0.0_RKIND
+            prs_scw_p(i,k,j) = 0.0_RKIND
+            prs_iau_p(i,k,j) = 0.0_RKIND
+            pri_ide_p(i,k,j) = 0.0_RKIND
+            prs_sci_p(i,k,j) = 0.0_RKIND
+            prr_sml_p(i,k,j) = 0.0_RKIND
+            prg_gcw_p(i,k,j) = 0.0_RKIND
+            prg_rcs_p(i,k,j) = 0.0_RKIND
+            prr_gml_p(i,k,j) = 0.0_RKIND
           enddo
           enddo
           enddo
@@ -642,6 +651,15 @@
  real(kind=RKIND),dimension(:,:),pointer  :: qv,qc,qr,qi,qs,qg
  real(kind=RKIND),dimension(:,:),pointer  :: ni,nr
  real(kind=RKIND),dimension(:,:),pointer  :: rainprod,evapprod
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prs_sde
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prs_scw
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prs_iau
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_pri_ide
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prs_sci
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prr_sml
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prg_gcw
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prg_rcs
+ real(kind=RKIND),dimension(:,:),pointer  :: tend_prr_gml
  real(kind=RKIND),dimension(:,:),pointer  :: re_cloud,re_ice,re_snow
  real(kind=RKIND),dimension(:,:,:),pointer:: scalars
 
@@ -692,6 +710,15 @@
  qr   => scalars(index_qr,:,:)
 
  call mpas_pool_get_array(tend,'rt_diabatic_tend',rt_diabatic_tend)
+ call mpas_pool_get_array(tend,'tend_prs_sde',tend_prs_sde)
+ call mpas_pool_get_array(tend,'tend_prs_scw',tend_prs_scw)
+ call mpas_pool_get_array(tend,'tend_prs_iau',tend_prs_iau)
+ call mpas_pool_get_array(tend,'tend_pri_ide',tend_pri_ide)
+ call mpas_pool_get_array(tend,'tend_prs_sci',tend_prs_sci)
+ call mpas_pool_get_array(tend,'tend_prr_sml',tend_prr_sml)
+ call mpas_pool_get_array(tend,'tend_prg_gcw',tend_prg_gcw)
+ call mpas_pool_get_array(tend,'tend_prg_rcs',tend_prg_rcs)
+ call mpas_pool_get_array(tend,'tend_prr_gml',tend_prr_gml)
 
 !update variables needed in the dynamical core:
  do j = jts,jte
@@ -779,9 +806,33 @@
              nr(k,i) = nr_p(i,k,j)
              rainprod(k,i) = rainprod_p(i,k,j)
              evapprod(k,i) = evapprod_p(i,k,j)
-          enddo
-          enddo
-          enddo
+            tend_prs_sde(k,i) = prs_sde_p(i,k,j)
+            tend_prs_scw(k,i) = prs_scw_p(i,k,j)
+            tend_prs_iau(k,i) = prs_iau_p(i,k,j)
+            tend_pri_ide(k,i) = pri_ide_p(i,k,j)
+            tend_prs_sci(k,i) = prs_sci_p(i,k,j)
+            tend_prr_sml(k,i) = prr_sml_p(i,k,j)
+            tend_prg_gcw(k,i) = prg_gcw_p(i,k,j)
+           tend_prg_rcs(k,i) = prg_rcs_p(i,k,j)
+           tend_prr_gml(k,i) = prr_gml_p(i,k,j)
+         enddo
+         enddo
+         enddo
+
+         if(count(prs_sde_p(its:ite,kts:kte,jts:jte) /= 0.0_RKIND) > 0) then
+           write(0,'(a,i8,a,e14.6)') 'DBG_WSM6_INTF prs_sde_p_nz=', &
+             count(prs_sde_p(its:ite,kts:kte,jts:jte) /= 0.0_RKIND), &
+             ' prs_sde_p_max=', maxval(abs(prs_sde_p(its:ite,kts:kte,jts:jte)))
+         endif
+         if(associated(tend_prs_sde)) then
+           if(count(tend_prs_sde(kts:kte,its:ite) /= 0.0_RKIND) > 0) then
+             write(0,'(a,i8,a,e14.6)') 'DBG_WSM6_INTF tend_sde_nz=', &
+               count(tend_prs_sde(kts:kte,its:ite) /= 0.0_RKIND), &
+               ' tend_sde_max=', maxval(abs(tend_prs_sde(kts:kte,its:ite)))
+           endif
+         else
+           write(0,'(a)') 'DBG_WSM6_INTF tend_prs_sde NOT ASSOCIATED!'
+         endif
 
        case default
 

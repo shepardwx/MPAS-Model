@@ -990,6 +990,9 @@
                               has_reqc, has_reqi, has_reqs,           &
 #if defined(mpas)
                               ntc,muc,rainprod,evapprod, &
+                              prs_sde_3d,prs_scw_3d,prs_iau_3d, &
+                              pri_ide_3d,prs_sci_3d,prr_sml_3d, &
+                              prg_gcw_3d,prg_rcs_3d,prr_gml_3d, &
 #endif
                               ids,ide, jds,jde, kds,kde, &             ! domain dims
                               ims,ime, jms,jme, kms,kme, &             ! memory dims
@@ -1020,6 +1023,13 @@
                           ntc,muc
       REAL, DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(INOUT):: &
                           rainprod,evapprod
+      REAL, DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(OUT):: &
+                          prs_sde_3d
+      REAL, DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(OUT):: &
+                          prs_scw_3d,prs_iau_3d,pri_ide_3d, &
+                          prs_sci_3d,prr_sml_3d
+      REAL, DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(OUT):: &
+                          prg_gcw_3d,prg_rcs_3d,prr_gml_3d
       REAL, DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(INOUT), OPTIONAL:: &
                           refl_10cm
 #else
@@ -1037,7 +1047,10 @@
       REAL, DIMENSION(kts:kte):: re_qc1d, re_qi1d, re_qs1d
 #if defined(mpas)
       REAL, DIMENSION(kts:kte):: &
-                          rainprod1d, evapprod1d
+                          rainprod1d, evapprod1d, &
+                          prs_sde_1d,prs_scw_1d,prs_iau_1d, &
+                          pri_ide_1d,prs_sci_1d,prr_sml_1d, &
+                          prg_gcw_1d,prg_rcs_1d,prr_gml_1d
 #endif
       REAL, DIMENSION(its:ite, jts:jte):: pcp_ra, pcp_sn, pcp_gr, pcp_ic
       REAL:: dt, pptrain, pptsnow, pptgraul, pptice
@@ -1164,6 +1177,9 @@
                       pptrain, pptsnow, pptgraul, pptice, &
 #if defined(mpas)
                       rainprod1d, evapprod1d, &
+                      prs_sde_1d,prs_scw_1d,prs_iau_1d, &
+                      pri_ide_1d,prs_sci_1d,prr_sml_1d, &
+                      prg_gcw_1d,prg_rcs_1d,prr_gml_1d, &
 #endif
                       kts, kte, dt, i, j)
 
@@ -1212,6 +1228,15 @@
 #if defined(mpas)
             rainprod(i,k,j) = rainprod1d(k)
             evapprod(i,k,j) = evapprod1d(k)
+            prs_sde_3d(i,k,j) = prs_sde_1d(k)
+            prs_scw_3d(i,k,j) = prs_scw_1d(k)
+            prs_iau_3d(i,k,j) = prs_iau_1d(k)
+            pri_ide_3d(i,k,j) = pri_ide_1d(k)
+            prs_sci_3d(i,k,j) = prs_sci_1d(k)
+            prr_sml_3d(i,k,j) = prr_sml_1d(k)
+            prg_gcw_3d(i,k,j) = prg_gcw_1d(k)
+            prg_rcs_3d(i,k,j) = prg_rcs_1d(k)
+            prr_gml_3d(i,k,j) = prr_gml_1d(k)
 #endif
             if (qc1d(k) .gt. qc_max) then
              imax_qc = i
@@ -1359,6 +1384,9 @@
                           pptrain, pptsnow, pptgraul, pptice, &
 #if defined(mpas)
                           rainprod, evapprod, &
+                          prs_sde_out, prs_scw_out, prs_iau_out, &
+                          pri_ide_out, prs_sci_out, prr_sml_out, &
+                          prg_gcw_out, prg_rcs_out, prr_gml_out, &
 #endif
                           kts, kte, dt, ii, jj)
 
@@ -1375,6 +1403,13 @@
 #if defined(mpas)
       REAL, DIMENSION(kts:kte), INTENT(INOUT):: &
                           rainprod, evapprod
+      REAL, DIMENSION(kts:kte), INTENT(OUT):: &
+                          prs_sde_out
+      REAL, DIMENSION(kts:kte), INTENT(OUT):: &
+                          prs_scw_out, prs_iau_out, pri_ide_out, &
+                          prs_sci_out, prr_sml_out
+      REAL, DIMENSION(kts:kte), INTENT(OUT):: &
+                          prg_gcw_out, prg_rcs_out, prr_gml_out
 #endif
 
 !..Local variables
@@ -3547,6 +3582,18 @@
          if (qs1d(k) .le. R1) qs1d(k) = 0.0
          qg1d(k) = qg1d(k) + qgten(k)*DT
          if (qg1d(k) .le. R1) qg1d(k) = 0.0
+      enddo
+
+      do k = kts, kte
+         prs_sde_out(k) = REAL(prs_sde(k))
+         prs_scw_out(k) = REAL(prs_scw(k))
+         prs_iau_out(k) = REAL(prs_iau(k))
+         pri_ide_out(k) = REAL(pri_ide(k))
+         prs_sci_out(k) = REAL(prs_sci(k))
+         prr_sml_out(k) = REAL(prr_sml(k))
+         prg_gcw_out(k) = REAL(prg_gcw(k))
+         prg_rcs_out(k) = REAL(prg_rcs(k))
+         prr_gml_out(k) = REAL(prr_gml(k))
       enddo
 
       end subroutine mp_thompson

@@ -157,6 +157,15 @@
 
           if(.not.allocated(rainprod_p)) allocate(rainprod_p(ims:ime,kms:kme,jms:jme))
           if(.not.allocated(evapprod_p)) allocate(evapprod_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prs_sde_p)) allocate(prs_sde_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prs_scw_p)) allocate(prs_scw_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prs_iau_p)) allocate(prs_iau_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(pri_ide_p)) allocate(pri_ide_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prs_sci_p)) allocate(prs_sci_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prr_sml_p)) allocate(prr_sml_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prg_gcw_p)) allocate(prg_gcw_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prg_rcs_p)) allocate(prg_rcs_p(ims:ime,kms:kme,jms:jme))
+          if(.not.allocated(prr_gml_p)) allocate(prr_gml_p(ims:ime,kms:kme,jms:jme))
 
        case default
 
@@ -231,6 +240,15 @@
 
           if(allocated(rainprod_p)) deallocate(rainprod_p)
           if(allocated(evapprod_p)) deallocate(evapprod_p)
+          if(allocated(prs_sde_p)) deallocate(prs_sde_p)
+          if(allocated(prs_scw_p)) deallocate(prs_scw_p)
+          if(allocated(prs_iau_p)) deallocate(prs_iau_p)
+          if(allocated(pri_ide_p)) deallocate(pri_ide_p)
+          if(allocated(prs_sci_p)) deallocate(prs_sci_p)
+          if(allocated(prr_sml_p)) deallocate(prr_sml_p)
+          if(allocated(prg_gcw_p)) deallocate(prg_gcw_p)
+          if(allocated(prg_rcs_p)) deallocate(prg_rcs_p)
+          if(allocated(prr_gml_p)) deallocate(prr_gml_p)
 
        case default
 
@@ -370,6 +388,15 @@
                   rainnc    = rainnc_p    , rainncv    = rainncv_p    , snownc     = snownc_p     , &
                   snowncv   = snowncv_p   , graupelnc  = graupelnc_p  , graupelncv = graupelncv_p , &
                   sr        = sr_p        , rainprod   = rainprod_p   , evapprod   = evapprod_p   , &
+                  prs_sde_3d= prs_sde_p   , &
+                  prs_scw_3d= prs_scw_p   , &
+                  prs_iau_3d= prs_iau_p   , &
+                  pri_ide_3d= pri_ide_p   , &
+                  prs_sci_3d= prs_sci_p   , &
+                  prr_sml_3d= prr_sml_p   , &
+                  prg_gcw_3d= prg_gcw_p   , &
+                  prg_rcs_3d= prg_rcs_p   , &
+                  prr_gml_3d= prr_gml_p   , &
                   re_cloud  = recloud_p   , re_ice     = reice_p      , re_snow    = resnow_p     , &
                   has_reqc  = has_reqc    , has_reqi   = has_reqi     , has_reqs   = has_reqs     , &
                   ntc       = ntc_p       , muc        = muc_p        ,                             &
@@ -396,6 +423,15 @@
                   cice      = cice        , psat       = psat         , rain      = rainnc_p  , &
                   rainncv   = rainncv_p   , snow       = snownc_p     , snowncv   = snowncv_p , &
                   graupel   = graupelnc_p , graupelncv = graupelncv_p , sr        = sr_p      , &
+                  prs_sde_3d= prs_sde_p   , &
+                  prs_scw_3d= prs_scw_p   , &
+                  prs_iau_3d= prs_iau_p   , &
+                  pri_ide_3d= pri_ide_p   , &
+                  prs_sci_3d= prs_sci_p   , &
+                  prr_sml_3d= prr_sml_p   , &
+                  prg_gcw_3d= prg_gcw_p   , &
+                  prg_rcs_3d= prg_rcs_p   , &
+                  prr_gml_3d= prr_gml_p   , &
                   re_cloud  = recloud_p   , re_ice     = reice_p      , re_snow   = resnow_p  , &
                   has_reqc  = has_reqc    , has_reqi   = has_reqi     , has_reqs  = has_reqs  , &
                   re_qc_bg  = re_qc_bg    , re_qi_bg   = re_qi_bg     , re_qs_bg  = re_qs_bg  , &
